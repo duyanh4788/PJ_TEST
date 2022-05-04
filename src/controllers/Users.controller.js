@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { Users } = require('../../models/users');
 const bcrypt = require('bcryptjs');
 
@@ -64,8 +65,7 @@ const userSignUp = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { account, fullName, birthDay, phone, isActive, userTypeCode } =
-      req.body;
+    const { account, fullName, birthDay, phone } = req.body;
   } catch (error) {
     res.status(500).send(error);
   }
