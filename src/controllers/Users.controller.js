@@ -1,5 +1,6 @@
 const { Op } = require('sequelize');
-const { Users } = require('../../models/users');
+const { Users } = require('../../models');
+const { findUserById } = require('../services/Users.service');
 const bcrypt = require('bcryptjs');
 
 const getAllUsers = async (req, res) => {
@@ -18,7 +19,7 @@ const searchUser = async (req, res) => {
     const data = await Users.findAll({
       where: {
         account: {
-          [Op.likẽ]: `%${res.query.account}%`,
+          [Op.like]: `%${req.query.account}%`,
         },
       },
     });
@@ -65,7 +66,31 @@ const userSignUp = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { account, fullName, birthDay, phone } = req.body;
+    const { fullName, birthDay, phone } = req.body;
+    const value = { fullName, birthDay, phone };
+    const { id } = req.params;
+    await Users.update(value, {
+      where: {
+        id,
+      },
+    });
+    const updateUser = await findUserById(id);
+    if (updateUser) {
+      res.status(200).send(updateUser);
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+const removeUser = async (req, res) => {
+  try {
+    const user = await findUserById(req.params.id);
+    if (user) {
+      res.status(200).send('Remove Account Success');
+    } else {
+      res.status(500).send('Account does not exist');
+    }
   } catch (error) {
     res.status(500).send(error);
   }
@@ -76,4 +101,6 @@ module.exports = {
   searchUser,
   getUserById,
   userSignUp,
+  updateUser,
+  removeUser,
 };

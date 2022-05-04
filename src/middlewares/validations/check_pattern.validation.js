@@ -30,11 +30,11 @@ const checkEmail = (req, res, next) => {
 const checkNumber = (req, res, next) => {
   const { phone } = req.body;
   const pattern = /^[0-9]+$/;
-  if (phone.match(pattern)) {
+  if (String(phone).match(pattern) && phone.toString().length === 10) {
     next();
   } else {
     res.status(400).send({
-      message: 'ONLY NUMBER',
+      message: 'ONLY NUMBER AND ONLY 10 NUMBER',
     });
   }
 };

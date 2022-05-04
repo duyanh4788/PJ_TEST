@@ -1,7 +1,15 @@
 const { Op } = require('sequelize');
-const { Users } = require('../../models/users')
+const { Users } = require('../../models');
 
+const findUserById = async id => {
+  const userByAccount = await Users.findByPk(id);
+  if (userByAccount) {
+    return userByAccount;
+  } else {
+    return false;
+  }
+};
 
-const findUserById = async (req ,res) =>{
-    const user = await Users
-}
+module.exports = {
+  findUserById,
+};

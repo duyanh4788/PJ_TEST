@@ -1,19 +1,21 @@
 const { Router } = require('express');
-const { Users } = require('../../models/users');
+const { Users } = require('../../models');
 const {
   getAllUsers,
   searchUser,
   getUserById,
   userSignUp,
+  updateUser,
+  removeUser,
 } = require('../controllers/Users.controller');
 const {
   checkAccountExist,
   checkPhoneExist,
+  checkExist,
 } = require('../middlewares/validations/check_exist.validation');
 
 const {
   checkEmpty,
-  checkEmail,
   checkNumber,
 } = require('../middlewares/validations/check_pattern.validation');
 
@@ -21,21 +23,38 @@ const {
   checkDefaultType,
 } = require('../middlewares/validations/check_userTypeCode.validation');
 
+const {
+  authenTicate,
+  permissions,
+} = require('../middlewares/auth/verifyToken.middleware');
+
 const userRouter = Router();
 
 userRouter.get('/', getAllUsers);
 userRouter.get('/search', searchUser);
-userRouter.get('/getUserById', getUserById);
+userRouter.get('/getUserById/:id', getUserById);
 userRouter.post(
   '/signUp',
   checkAccountExist(Users),
   checkPhoneExist(Users),
   checkEmpty,
-  checkEmail,
   checkNumber,
   userSignUp,
 );
-// useRouter.put('/updateUser');
+userRouter.put(
+  '/updateUser/:id',
+  checkExist(Users),
+  checkEmpty,
+  checkNumber,
+  updateUser,
+);
+userRouter.delete(
+  '/removeUser/:id',
+  authenTicate,
+  permissions,
+  checkExist(Users),
+  removeUser,
+);
 
 module.exports = {
   userRouter,
