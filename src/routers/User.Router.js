@@ -33,7 +33,6 @@ userRouter.post(
   checkEmpty,
   checkEmail,
   checkNumber,
-  checkDefaultType,
   userSignUp,
 );
 // useRouter.put('/updateUser');

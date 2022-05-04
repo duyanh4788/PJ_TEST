@@ -42,15 +42,7 @@ const getUserById = async (req, res) => {
 
 const userSignUp = async (req, res) => {
   try {
-    const {
-      account,
-      passWord,
-      fullName,
-      birthDay,
-      phone,
-      isActive,
-      userTypeCode,
-    } = req.body;
+    const { account, passWord, fullName, birthDay, phone } = req.body;
     const salt = bcrypt.genSaltSync(10);
     const hashPassword = bcrypt.hashSync(passWord, salt);
     const newUser = await Users.create({
@@ -59,8 +51,8 @@ const userSignUp = async (req, res) => {
       fullName,
       birthDay,
       phone,
-      isActive,
-      userTypeCode,
+      isActive: true,
+      userTypeCode: 'USER',
     });
     if (newUser) {
       return res.status(200).send(newUser);
