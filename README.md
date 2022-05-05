@@ -7,7 +7,7 @@ Clone this repo using git clone --depth=1 <GIT_URL> <YOUR_PROJECT_NAME>
 
 Move to the appropriate directory: cd <YOUR_PROJECT_NAME>.
 
-******** Step git ********
+******** Setup git ********
 1. git checkout -b develop
 2. git fetch 
 3. git reset --hard origin/develop
@@ -18,4 +18,8 @@ Run npm run install & yarn install in order to install dependencies.
 
 Run npm start & yarn start in order to install dependencies.
 At this point you can see the example app at http://localhost:7000.
+
+******** Setup MySQL ********
+Please check file /config/config.json
+
 Now you're ready to rumble!
