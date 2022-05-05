@@ -84,9 +84,15 @@ const updateUser = async (req, res) => {
 };
 
 const removeUser = async (req, res) => {
+  const { id } = req.params;
   try {
-    const user = await findUserById(req.params.id);
+    const user = await findUserById(id);
     if (user) {
+      await Users.destroy({
+        where: {
+          id,
+        },
+      });
       res.status(200).send('Remove Account Success');
     } else {
       res.status(500).send('Account does not exist');

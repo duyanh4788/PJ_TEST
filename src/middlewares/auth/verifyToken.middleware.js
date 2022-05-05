@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const { USER_TYPE_CODE, SECRETKEY } = require('../../utils/common_constants');
 const authenTicate = (req, res, next) => {
   try {
-    const token = req.header('token');
+    const token = req.header('Authorization');
     const deCode = jwt.verify(token, SECRETKEY);
     req.account = deCode;
     next();

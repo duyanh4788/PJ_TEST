@@ -1,4 +1,3 @@
-const { Op } = require('sequelize');
 const { Users } = require('../../models');
 
 const findUserById = async id => {

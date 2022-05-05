@@ -11,7 +11,7 @@ module.exports = {
       dateLogin: {
         type: Sequelize.DATE
       },
-      nameUser: {
+      accountUser: {
         type: Sequelize.STRING
       },
       userTypeCode: {

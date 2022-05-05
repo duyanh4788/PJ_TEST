@@ -44,6 +44,7 @@ userRouter.post(
 userRouter.put(
   '/updateUser/:id',
   checkExist(Users),
+  authenTicate,
   checkEmpty,
   checkNumber,
   updateUser,
@@ -52,7 +53,6 @@ userRouter.delete(
   '/removeUser/:id',
   authenTicate,
   permissions,
-  checkExist(Users),
   removeUser,
 );
 

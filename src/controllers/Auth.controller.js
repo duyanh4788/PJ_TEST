@@ -2,19 +2,20 @@ const {
   checkAccountAuth,
   checkPasswordAuth,
   checkNewPasswordAuth,
-  updateAccount,
 } = require('../services/Auth.service');
+const { createAccountLoginReport } = require('../services/Report.service');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { SECRETKEY } = require('../utils/common_constants');
-const { Users } = require('../../models');
+const { Users, CountLogin } = require('../../models');
 
 const userSignIn = async (req, res) => {
   const { account, passWord } = req.body;
   try {
     const checkAccount = await checkAccountAuth(account);
-    checkAccount.countLogin += 1;
-    updateAccount(checkAccount.account, checkAccount.countLogin);
+    if (!checkAccount) {
+      return res.status(400).send('Account does not exits');
+    }
     const isCheck = checkPasswordAuth(passWord, checkAccount.passWord);
     if (!isCheck) {
       return res.status(400).send('Password is wrong');
@@ -24,6 +25,8 @@ const userSignIn = async (req, res) => {
       phone: checkAccount.phone,
       userTypeCode: checkAccount.userTypeCode,
     };
+
+    createAccountLoginReport(checkAccount);
     const token = jwt.sign(data, SECRETKEY, { expiresIn: 86400000 });
     res.status(200).send({
       message: 'Login succesFully',
