@@ -2,6 +2,7 @@ const {
   checkAccountAuth,
   checkPasswordAuth,
   checkNewPasswordAuth,
+  updateAccount,
 } = require('../services/Auth.service');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -12,7 +13,12 @@ const userSignIn = async (req, res) => {
   const { account, passWord } = req.body;
   try {
     const checkAccount = await checkAccountAuth(account);
-    checkPasswordAuth(passWord, checkAccount.passWord);
+    checkAccount.countLogin += 1;
+    updateAccount(checkAccount.account, checkAccount.countLogin);
+    const isCheck = checkPasswordAuth(passWord, checkAccount.passWord);
+    if (!isCheck) {
+      return res.status(400).send('Password is wrong');
+    }
     const data = {
       account: checkAccount.account,
       phone: checkAccount.phone,
@@ -27,7 +33,6 @@ const userSignIn = async (req, res) => {
     res.status(500).send(error);
   }
 };
-
 const changePassWord = async (req, res) => {
   const { account, passWord, newPassword, confirmPassword } = req.body;
   try {
@@ -51,7 +56,6 @@ const changePassWord = async (req, res) => {
           },
         },
       );
-      console.log(data1);
       const data = {
         account: checkAccount.account,
         phone: checkAccount.phone,

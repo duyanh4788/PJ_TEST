@@ -22,6 +22,8 @@ const checkPasswordAuth = (password, passWordUser) => {
   const checkPassword = bcrypt.compareSync(password, passWordUser);
   if (checkPassword) {
     return true;
+  } else {
+    return false;
   }
 };
 
@@ -31,8 +33,21 @@ const checkNewPasswordAuth = (newPassWord, confirmPassword) => {
   }
 };
 
+const updateAccount = async (account, data) => {
+  console.log(data);
+  await Users.update(
+    { countLogin: data },
+    {
+      where: {
+        account,
+      },
+    },
+  );
+};
+
 module.exports = {
   checkPasswordAuth,
   checkAccountAuth,
   checkNewPasswordAuth,
+  updateAccount,
 };
