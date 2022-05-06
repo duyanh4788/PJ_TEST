@@ -59,11 +59,11 @@ const getCountLoginAccountByDate = async (req, res) => {
   try {
     const query = `
     select accountUser , count(*) as countLoginDate from CountLogins where 
-    CountLogins.accountUser='${req.query.account}' and CountLogins.dateLogin like '${req.query.dateLogin}%'
+    CountLogins.accountUser='${req.query.account}' and CountLogins.dateLogin like '%${req.query.dateLogin}'
     `;
     const [result, metaData] = await sequelize.query(query);
     if (result[0] && result[0].accountUser === null) {
-      return res.status(200).send('Account does not exits');
+      return res.status(200).send('Data not fount');
     }
     res.status(200).send(result[0]);
   } catch (error) {
